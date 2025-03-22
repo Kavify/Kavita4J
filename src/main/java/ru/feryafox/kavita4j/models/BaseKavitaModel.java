@@ -1,4 +1,9 @@
 package ru.feryafox.kavita4j.models;
 
-public interface BaseKavitaModel {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+public abstract class BaseKavitaModel {
 }

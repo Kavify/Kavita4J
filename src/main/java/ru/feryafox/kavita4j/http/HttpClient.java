@@ -1,29 +1,107 @@
 package ru.feryafox.kavita4j.http;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import ru.feryafox.kavita4j.models.BaseKavitaModel;
+import com.google.gson.Gson;
+import okhttp3.*;
+import ru.feryafox.kavita4j.models.requests.BaseKavitaRequestModel;
+import ru.feryafox.kavita4j.models.requests.account.Login;
+import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
+import ru.feryafox.kavita4j.models.responses.NoneResponse;
+import ru.feryafox.kavita4j.models.responses.account.User;
 
-public class HttpClient {
-    private String baseUrl;
-    private HttpUrl url;
-    private OkHttpClient client;
-    private ObjectMapper objectMapper;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
+
+public class HttpClient implements BaseHttpClient {
+    private final HttpUrl url;
+    private final OkHttpClient client;
+    private final Gson gson;
+    private String accessToken;
 
     public HttpClient(String baseUrl) {
-        this.baseUrl = baseUrl;
         url = HttpUrl.parse(baseUrl);
-        client = new OkHttpClient();
-        objectMapper = new ObjectMapper();
+        client = createClient();
+        gson = new Gson();
     }
 
-    public <T> T post(Class<T> clazz, BaseKavitaModel requestModel, String[]... pathSegments) {
-        Request request = new Request.Builder()
-                .url(baseUrl + url)
-                .build()
+    private OkHttpClient createClient() {
+        return new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    Request request = chain.request();
+
+                    if (accessToken != null && !accessToken.isEmpty()) {
+                        Request requestWithAuth = request.newBuilder()
+                                .addHeader("Authorization", "Bearer " + accessToken).build();
+                        return chain.proceed(requestWithAuth);
+                    }
+                    return chain.proceed(request);
+                })
+                .build();
     }
 
-    private
+    @Override
+    public <T extends BaseKavitaResponseModel> HttpClientResponse<T> post(Class<T> clazz, BaseKavitaRequestModel requestModel, RequestOptions requestOptions, String... pathSegments) {
+        String json = gson.toJson(requestModel);
+
+        RequestBody requestBody = RequestBody.create(json, MediaType.parse("application/json"));
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(createUrl(requestOptions, pathSegments))
+                .post(requestBody);
+
+        if (requestOptions != null && requestOptions.getHeaders() != null) {
+            requestOptions.getHeaders().forEach(requestBuilder::addHeader);
+        }
+
+        return call(requestBuilder.build(), clazz);
+    }
+
+    @Override
+    public <T extends BaseKavitaResponseModel> HttpClientResponse<T> get(Class<T> clazz, RequestOptions requestOptions, String... pathSegments) {
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(createUrl(requestOptions, pathSegments))
+                .get();
+
+        if (requestOptions != null && requestOptions.getHeaders() != null) {
+            requestOptions.getHeaders().forEach(requestBuilder::addHeader);
+        }
+
+        return call(requestBuilder.build(), clazz);
+    }
+
+
+    private <T extends BaseKavitaResponseModel> HttpClientResponse<T> call(Request request, Class<T> clazz) {
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                if (clazz == NoneResponse.class) {
+                    @SuppressWarnings("unchecked")
+                    T noneInstance = (T) NoneResponse.create();
+                    return HttpClientResponse.from(response, noneInstance);
+                }
+                return HttpClientResponse.from(
+                        response,
+                        gson.fromJson(response.body().string(), clazz)
+                );
+            } else {
+                return HttpClientResponse.from(
+                        response,
+                        response.body().string()
+                );
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String createUrl(RequestOptions requestOptions, String... pathSegments) {
+        var builder = url.newBuilder();
+        Arrays.stream(pathSegments).forEach(builder::addPathSegment);
+
+        if (requestOptions != null && requestOptions.getQueryParams() != null) {
+            requestOptions.getQueryParams().forEach(builder::addQueryParameter);
+        }
+
+        return builder.build().toString();
+    }
+
 }
