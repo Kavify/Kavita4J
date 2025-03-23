@@ -2,6 +2,7 @@ package ru.feryafox.kavita4j.components;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import ru.feryafox.kavita4j.exceptions.account.IncorrectCredentialsException;
 import ru.feryafox.kavita4j.exceptions.account.InvalidTokenException;
 import ru.feryafox.kavita4j.http.BaseAuthHttpClient;
@@ -52,9 +53,9 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
         var response = client.post(
                 User.class,
                 Login.builder()
-                        .username(username)
-                        .password(password)
-                        .apiKey(apiKey)
+                        .username(username != null ? username : "")
+                        .password(password != null ? password : "")
+                        .apiKey(apiKey != null ? apiKey : "")
                         .build(),
                 "api",
                 "Account",
@@ -188,6 +189,7 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
 
     @AllArgsConstructor
     @Getter
+    @ToString
     public static class Kavita4JAuthCredentials {
        private String username;
        private String password;
