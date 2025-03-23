@@ -138,6 +138,11 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
     }
 
     @Override
+    public void setBaseUrl(String baseUrl) {
+         client.setBaseUrl(baseUrl);
+    }
+
+    @Override
     public <T extends BaseKavitaResponseModel> HttpClientResponse<T> get(Class<T> clazz, RequestOptions options, String... pathSegments) {
         return client.get(clazz, options, pathSegments);
     }

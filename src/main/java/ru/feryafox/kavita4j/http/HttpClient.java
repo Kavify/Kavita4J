@@ -13,15 +13,24 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class HttpClient implements BaseHttpClient {
-    private final HttpUrl url;
+    private HttpUrl url;
     private final OkHttpClient client;
     private final Gson gson;
     private String accessToken;
 
     public HttpClient(String baseUrl) {
-        url = HttpUrl.parse(baseUrl);
+        url = createUrl(baseUrl);
         client = createClient();
         gson = new Gson();
+    }
+
+    private HttpUrl createUrl(String baseUr) {
+        return HttpUrl.parse(baseUr);
+    }
+
+    @Override
+    public void setBaseUrl(String baseUrl) {
+        url = createUrl(baseUrl);
     }
 
     private OkHttpClient createClient() {
