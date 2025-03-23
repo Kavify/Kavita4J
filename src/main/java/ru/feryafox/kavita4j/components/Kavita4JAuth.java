@@ -188,7 +188,7 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
 
     @AllArgsConstructor
     @Getter
-    public class Kavita4JAuthCredentials {
+    public static class Kavita4JAuthCredentials {
        private String username;
        private String password;
        private String apiKey;
