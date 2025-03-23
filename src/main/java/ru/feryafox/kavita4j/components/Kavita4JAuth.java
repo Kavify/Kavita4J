@@ -38,6 +38,14 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
         refreshToken = credentials.refreshToken;
     }
 
+    public HttpClientResponse<User> login(String username, String password) {
+        return login(username, password, null);
+    }
+
+    public HttpClientResponse<User> login(String apiKey) {
+        return login(null, null, apiKey);
+    }
+
     public HttpClientResponse<User> login(String username, String password, String apiKey) {
         var response = client.post(
                 User.class,

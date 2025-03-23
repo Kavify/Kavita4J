@@ -2,7 +2,6 @@ package ru.feryafox.kavita4j.components;
 
 import ru.feryafox.kavita4j.http.BaseAuthHttpClient;
 import ru.feryafox.kavita4j.http.HttpClientResponse;
-import ru.feryafox.kavita4j.models.responses.NoneResponse;
 import ru.feryafox.kavita4j.models.responses.account.User;
 
 public class Kavita4JAccount {
