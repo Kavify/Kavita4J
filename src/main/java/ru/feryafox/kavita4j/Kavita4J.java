@@ -27,4 +27,8 @@ public class Kavita4J {
     public Kavita4JSearch search() {
         return search;
     }
+
+    public void setBaseUrl(String baseUrl) {
+        client.setBaseUrl(baseUrl);
+    }
 }
