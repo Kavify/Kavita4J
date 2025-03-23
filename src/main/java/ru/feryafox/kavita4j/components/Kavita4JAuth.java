@@ -1,5 +1,7 @@
 package ru.feryafox.kavita4j.components;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import ru.feryafox.kavita4j.exceptions.account.IncorrectCredentialsException;
 import ru.feryafox.kavita4j.exceptions.account.InvalidTokenException;
 import ru.feryafox.kavita4j.http.BaseAuthHttpClient;
@@ -31,11 +33,11 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
     }
 
     public void loadCredentials(Kavita4JAuthCredentials credentials) {
-        username = credentials.username;
-        password = credentials.password;
-        apiKey = credentials.apiKey;
-        accessToken = credentials.accessToken;
-        refreshToken = credentials.refreshToken;
+        username = credentials.getUsername();
+        password = credentials.getPassword();
+        apiKey = credentials.getApiKey();
+        accessToken = credentials.getAccessToken();
+        refreshToken = credentials.getRefreshToken();
     }
 
     public HttpClientResponse<User> login(String username, String password) {
@@ -179,11 +181,13 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
         return cloneOptions;
     }
 
-    public record Kavita4JAuthCredentials(
-            String username,
-            String password,
-            String apiKey,
-            String accessToken,
-            String refreshToken
-    ){ }
+    @AllArgsConstructor
+    @Getter
+    public class Kavita4JAuthCredentials {
+       private String username;
+       private String password;
+       private String apiKey;
+       private String accessToken;
+       private String refreshToken;
+    }
 }
