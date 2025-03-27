@@ -23,10 +23,20 @@ import java.util.Map;
 
 public class Kavita4JAuth implements BaseAuthHttpClient {
     private final BaseHttpClient client;
+
+    @Getter
     private String username;
+
+    @Getter
     private String password;
+
+    @Getter
     private String apiKey;
+
+    @Getter
     private String accessToken;
+
+    @Getter
     private String refreshToken;
 
     public Kavita4JAuth(BaseHttpClient client) {
@@ -141,6 +151,11 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
     @Override
     public void setBaseUrl(String baseUrl) {
          client.setBaseUrl(baseUrl);
+    }
+
+    @Override
+    public String getBaseUrl() {
+        return client.getBaseUrl();
     }
 
     @Override

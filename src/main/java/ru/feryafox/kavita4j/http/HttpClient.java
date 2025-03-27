@@ -33,6 +33,11 @@ public class HttpClient implements BaseHttpClient {
         url = createUrl(baseUrl);
     }
 
+    @Override
+    public String getBaseUrl() {
+        return url.toString();
+    }
+
     private OkHttpClient createClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
