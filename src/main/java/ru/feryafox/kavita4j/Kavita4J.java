@@ -1,5 +1,6 @@
 package ru.feryafox.kavita4j;
 
+import ru.feryafox.kavita4j.components.Kavita4JAccount;
 import ru.feryafox.kavita4j.components.Kavita4JAuth;
 import ru.feryafox.kavita4j.components.Kavita4JImage;
 import ru.feryafox.kavita4j.components.Kavita4JSearch;
@@ -11,6 +12,7 @@ public class Kavita4J {
     private final Kavita4JAuth auth;
     private final Kavita4JSearch search;
     private final Kavita4JImage image;
+    private final Kavita4JAccount account;
 
     public Kavita4J(String baseUrl) {
         this(new HttpClient(baseUrl));
@@ -21,6 +23,7 @@ public class Kavita4J {
         this.auth = new Kavita4JAuth(client);
         this.search = new Kavita4JSearch(auth);
         this.image = new Kavita4JImage(auth);
+        this.account = new Kavita4JAccount(auth);
     }
 
     public Kavita4JAuth auth() {
@@ -33,6 +36,10 @@ public class Kavita4J {
 
     public Kavita4JImage image() {
         return image;
+    }
+
+    public Kavita4JAccount account() {
+        return account;
     }
 
     public void setBaseUrl(String baseUrl) {
