@@ -12,6 +12,6 @@ public class Kavita4JAccount {
     }
 
     public HttpClientResponse<User> refreshAccount() {
-        return client.getAuth(User.class, "api", "Account", "refresh");
+        return client.getAuth(User.class, "api", "Account", "refresh-account");
     }
 }
