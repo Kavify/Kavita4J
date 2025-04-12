@@ -15,6 +15,7 @@ import ru.feryafox.kavita4j.models.requests.account.ResetPassword;
 import ru.feryafox.kavita4j.models.requests.account.TokenRequest;
 import ru.feryafox.kavita4j.models.requests.account.Register;
 import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
+import ru.feryafox.kavita4j.models.responses.BinaryResponse;
 import ru.feryafox.kavita4j.models.responses.NoneResponse;
 import ru.feryafox.kavita4j.models.responses.account.TokenResponse;
 import ru.feryafox.kavita4j.models.responses.account.User;
@@ -194,6 +195,18 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
         }
 
         return response;
+    }
+
+    @Override
+    public BinaryResponse getBinary(RequestOptions options, String... pathSegments) {
+        return client.getBinary(options, pathSegments);
+    }
+
+    @Override
+    public BinaryResponse getBinaryAuth(RequestOptions requestOptions, String... pathSegments) {
+        var optionsWithAuthHeader = addAuthHeader(requestOptions);
+
+        return client.getBinary(optionsWithAuthHeader, pathSegments);
     }
 
     private RequestOptions addAuthHeader(RequestOptions options) {

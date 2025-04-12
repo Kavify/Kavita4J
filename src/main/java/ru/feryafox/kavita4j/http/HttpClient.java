@@ -5,6 +5,7 @@ import okhttp3.*;
 import ru.feryafox.kavita4j.models.requests.BaseKavitaRequestModel;
 import ru.feryafox.kavita4j.models.requests.account.Login;
 import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
+import ru.feryafox.kavita4j.models.responses.BinaryResponse;
 import ru.feryafox.kavita4j.models.responses.NoneResponse;
 import ru.feryafox.kavita4j.models.responses.account.User;
 
@@ -83,6 +84,32 @@ public class HttpClient implements BaseHttpClient {
         return call(requestBuilder.build(), clazz);
     }
 
+    @Override
+    public BinaryResponse getBinary(RequestOptions requestOptions, String... pathSegments) {
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(createUrl(requestOptions, pathSegments))
+                .get();
+
+        if (requestOptions != null && requestOptions.getHeaders() != null) {
+            requestOptions.getHeaders().forEach(requestBuilder::addHeader);
+        }
+
+        Request request = requestBuilder.build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Failed to download binary: " + response);
+            }
+
+            ResponseBody body = response.body();
+            byte[] bytes = body != null ? body.bytes() : null;
+
+            return BinaryResponse.builder()
+                            .data(bytes).build();
+        } catch (IOException e) {
+            throw new RuntimeException("Download error", e);
+        }
+    }
 
     private <T extends BaseKavitaResponseModel> HttpClientResponse<T> call(Request request, Class<T> clazz) {
         try (Response response = client.newCall(request).execute()) {
