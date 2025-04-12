@@ -113,22 +113,26 @@ public class HttpClient implements BaseHttpClient {
 
     private <T extends BaseKavitaResponseModel> HttpClientResponse<T> call(Request request, Class<T> clazz) {
         try (Response response = client.newCall(request).execute()) {
+            String responseBody = response.body() != null ? response.body().string() : "";
+
             if (response.isSuccessful()) {
                 if (clazz == NoneResponse.class) {
                     @SuppressWarnings("unchecked")
                     T noneInstance = (T) NoneResponse.create();
                     return HttpClientResponse.from(response, noneInstance);
                 }
-                return HttpClientResponse.from(
-                        response,
-                        gson.fromJson(response.body().string(), clazz)
-                );
+
+                try {
+                    T model = gson.fromJson(responseBody, clazz);
+                    return HttpClientResponse.from(response, model);
+                } catch (Exception parseException) {
+                    return HttpClientResponse.from(response, "Failed to parse response: " + responseBody);
+                }
+
             } else {
-                return HttpClientResponse.from(
-                        response,
-                        response.body().string()
-                );
+                return HttpClientResponse.from(response, responseBody);
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
