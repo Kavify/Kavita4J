@@ -1,5 +1,6 @@
 package ru.feryafox.kavita4j;
 
+import com.google.gson.Gson;
 import ru.feryafox.kavita4j.components.Kavita4JAccount;
 import ru.feryafox.kavita4j.components.Kavita4JAuth;
 import ru.feryafox.kavita4j.components.Kavita4JImage;
@@ -13,6 +14,7 @@ public class Kavita4J {
     private final Kavita4JSearch search;
     private final Kavita4JImage image;
     private final Kavita4JAccount account;
+    private final Gson gson = new Gson();
 
     public Kavita4J(String baseUrl) {
         this(new HttpClient(baseUrl));
@@ -23,7 +25,7 @@ public class Kavita4J {
         this.auth = new Kavita4JAuth(client);
         this.search = new Kavita4JSearch(auth);
         this.image = new Kavita4JImage(auth);
-        this.account = new Kavita4JAccount(auth);
+        this.account = new Kavita4JAccount(auth, gson);
     }
 
     public Kavita4JAuth auth() {

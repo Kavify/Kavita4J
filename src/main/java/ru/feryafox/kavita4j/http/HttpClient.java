@@ -7,6 +7,7 @@ import ru.feryafox.kavita4j.models.requests.account.Login;
 import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 import ru.feryafox.kavita4j.models.responses.BinaryResponse;
 import ru.feryafox.kavita4j.models.responses.NoneResponse;
+import ru.feryafox.kavita4j.models.responses.RawResponse;
 import ru.feryafox.kavita4j.models.responses.account.User;
 
 import java.io.IOException;
@@ -72,6 +73,11 @@ public class HttpClient implements BaseHttpClient {
     }
 
     @Override
+    public HttpClientResponse<RawResponse> postRaw(BaseKavitaRequestModel requestModel, RequestOptions options, String... pathSegments) {
+        return post(RawResponse.class, requestModel, options, pathSegments);
+    }
+
+    @Override
     public <T extends BaseKavitaResponseModel> HttpClientResponse<T> get(Class<T> clazz, RequestOptions requestOptions, String... pathSegments) {
         Request.Builder requestBuilder = new Request.Builder()
                 .url(createUrl(requestOptions, pathSegments))
@@ -82,6 +88,11 @@ public class HttpClient implements BaseHttpClient {
         }
 
         return call(requestBuilder.build(), clazz);
+    }
+
+    @Override
+    public HttpClientResponse<RawResponse> getRaw(RequestOptions options, String... pathSegments) {
+        return get(RawResponse.class, options, pathSegments);
     }
 
     @Override
@@ -118,6 +129,10 @@ public class HttpClient implements BaseHttpClient {
                     @SuppressWarnings("unchecked")
                     T noneInstance = (T) NoneResponse.create();
                     return HttpClientResponse.from(response, noneInstance);
+                } else if (clazz == RawResponse.class) {
+                    @SuppressWarnings("unchecked")
+                    T rawInstance = (T) new RawResponse(response.body().string());
+                    return HttpClientResponse.from(response, rawInstance);
                 }
                 return HttpClientResponse.from(
                         response,

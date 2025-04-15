@@ -17,6 +17,7 @@ import ru.feryafox.kavita4j.models.requests.account.Register;
 import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 import ru.feryafox.kavita4j.models.responses.BinaryResponse;
 import ru.feryafox.kavita4j.models.responses.NoneResponse;
+import ru.feryafox.kavita4j.models.responses.RawResponse;
 import ru.feryafox.kavita4j.models.responses.account.TokenResponse;
 import ru.feryafox.kavita4j.models.responses.account.User;
 
@@ -165,8 +166,18 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
     }
 
     @Override
+    public HttpClientResponse<RawResponse> getRaw(RequestOptions options, String... pathSegments) {
+        return client.getRaw(options, pathSegments);
+    }
+
+    @Override
     public <T extends BaseKavitaResponseModel> HttpClientResponse<T> post(Class<T> clazz, BaseKavitaRequestModel requestModel, RequestOptions options, String... pathSegments) {
         return client.post(clazz, requestModel, options, pathSegments);
+    }
+
+    @Override
+    public HttpClientResponse<RawResponse> postRaw(BaseKavitaRequestModel requestModel, RequestOptions options, String... pathSegments) {
+        return client.postRaw(requestModel, options, pathSegments);
     }
 
     @Override
@@ -207,6 +218,20 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
         var optionsWithAuthHeader = addAuthHeader(requestOptions);
 
         return client.getBinary(optionsWithAuthHeader, pathSegments);
+    }
+
+    @Override
+    public HttpClientResponse<RawResponse> getAuthRaw(RequestOptions requestOptions, String... pathSegments) {
+        var optionsWithAuthHeader = addAuthHeader(requestOptions);
+
+        return client.getRaw(optionsWithAuthHeader, pathSegments);
+    }
+
+    @Override
+    public HttpClientResponse<RawResponse> postAuthRaw(BaseKavitaRequestModel requestModel, RequestOptions requestOptions, String... pathSegments) {
+        var optionsWithAuthHeader = addAuthHeader(requestOptions);
+
+        return client.postRaw(requestModel, optionsWithAuthHeader, pathSegments);
     }
 
     private RequestOptions addAuthHeader(RequestOptions options) {

@@ -42,4 +42,10 @@ public class HttpClientResponse <T extends BaseKavitaResponseModel> {
     public static <T extends BaseKavitaResponseModel> HttpClientResponse<T> from(Response response, String errorMessage) {
         return new HttpClientResponse<>(response.code(), errorMessage);
     }
+    public static <T extends BaseKavitaResponseModel> HttpClientResponse<T> from(int statusCode, T responseModel) {
+        return new HttpClientResponse<>(statusCode, responseModel);
+    }
+    public static <T extends BaseKavitaResponseModel> HttpClientResponse<T> from(int statusCode, String errorMessage) {
+        return new HttpClientResponse<>(statusCode, errorMessage);
+    }
 }
