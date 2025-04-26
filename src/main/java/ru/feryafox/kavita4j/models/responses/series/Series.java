@@ -1,4 +1,4 @@
-package ru.feryafox.kavita4j.models.responses.search;
+package ru.feryafox.kavita4j.models.responses.series;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;

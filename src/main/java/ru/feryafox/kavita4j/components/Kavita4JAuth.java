@@ -181,6 +181,16 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
     }
 
     @Override
+    public <T extends BaseKavitaResponseModel> HttpClientResponse<T> delete(Class<T> clazz, RequestOptions options, String... pathSegments) {
+        return client.delete(clazz, options, pathSegments);
+    }
+
+    @Override
+    public HttpClientResponse<RawResponse> deleteRaw(RequestOptions options, String... pathSegments) {
+        return client.deleteRaw(options, pathSegments);
+    }
+
+    @Override
     public <T extends BaseKavitaResponseModel> HttpClientResponse<T> getAuth(Class<T> clazz, RequestOptions options, String... pathSegments) {
         var optionsWithAuthHeader = addAuthHeader(options);
         var response = client.get(clazz, optionsWithAuthHeader, pathSegments);
@@ -203,6 +213,20 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
         if (response.statusCode() == 401) {
             refreshToken();
             return client.post(clazz, requestModel, optionsWithAuthHeader, pathSegments);
+        }
+
+        return response;
+    }
+
+    @Override
+    public <T extends BaseKavitaResponseModel> HttpClientResponse<T> deleteAuth(Class<T> clazz, RequestOptions options, String... pathSegments) {
+        var optionsWithAuthHeader = addAuthHeader(options);
+        var response = client.delete(clazz, optionsWithAuthHeader, pathSegments);
+
+        // TODO узнать, какой код ошибки при просроченном токене
+        if (response.statusCode() == 401) {
+            refreshToken();
+            return client.delete(clazz, optionsWithAuthHeader, pathSegments);
         }
 
         return response;
@@ -232,6 +256,13 @@ public class Kavita4JAuth implements BaseAuthHttpClient {
         var optionsWithAuthHeader = addAuthHeader(requestOptions);
 
         return client.postRaw(requestModel, optionsWithAuthHeader, pathSegments);
+    }
+
+    @Override
+    public HttpClientResponse<RawResponse> deleteAuthRaw(RequestOptions requestOptions, String... pathSegments) {
+        var optionsWithAuthHeader = addAuthHeader(requestOptions);
+
+        return client.deleteRaw(optionsWithAuthHeader, pathSegments);
     }
 
     private RequestOptions addAuthHeader(RequestOptions options) {

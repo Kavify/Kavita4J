@@ -2,6 +2,8 @@ package ru.feryafox.kavita4j.http;
 
 import com.google.gson.Gson;
 import okhttp3.*;
+import ru.feryafox.kavita4j.models.JsonArrayHolder;
+import ru.feryafox.kavita4j.models.JsonValueHolder;
 import ru.feryafox.kavita4j.models.requests.BaseKavitaRequestModel;
 import ru.feryafox.kavita4j.models.requests.account.Login;
 import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
@@ -12,6 +14,7 @@ import ru.feryafox.kavita4j.models.responses.account.User;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class HttpClient implements BaseHttpClient {
@@ -78,6 +81,24 @@ public class HttpClient implements BaseHttpClient {
     }
 
     @Override
+    public <T extends BaseKavitaResponseModel> HttpClientResponse<T> delete(Class<T> clazz, RequestOptions options, String... pathSegments) {
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(createUrl(options, pathSegments))
+                .delete();
+
+        if (options != null && options.getHeaders() != null) {
+            options.getHeaders().forEach(requestBuilder::addHeader);
+        }
+
+        return call(requestBuilder.build(), clazz);
+    }
+
+    @Override
+    public HttpClientResponse<RawResponse> deleteRaw(RequestOptions options, String... pathSegments) {
+        return delete(RawResponse.class, options, pathSegments);
+    }
+
+    @Override
     public <T extends BaseKavitaResponseModel> HttpClientResponse<T> get(Class<T> clazz, RequestOptions requestOptions, String... pathSegments) {
         Request.Builder requestBuilder = new Request.Builder()
                 .url(createUrl(requestOptions, pathSegments))
@@ -122,31 +143,79 @@ public class HttpClient implements BaseHttpClient {
         }
     }
 
-    private <T extends BaseKavitaResponseModel> HttpClientResponse<T> call(Request request, Class<T> clazz) {
+    private <T extends BaseKavitaResponseModel> HttpClientResponse<T> call(Request request,
+                                                                           Class<T> clazz) {
         try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                if (clazz == NoneResponse.class) {
-                    @SuppressWarnings("unchecked")
-                    T noneInstance = (T) NoneResponse.create();
-                    return HttpClientResponse.from(response, noneInstance);
-                } else if (clazz == RawResponse.class) {
-                    @SuppressWarnings("unchecked")
-                    T rawInstance = (T) new RawResponse(response.body().string());
-                    return HttpClientResponse.from(response, rawInstance);
-                }
-                return HttpClientResponse.from(
-                        response,
-                        gson.fromJson(response.body().string(), clazz)
-                );
-            } else {
-                return HttpClientResponse.from(
-                        response,
-                        response.body().string()
-                );
+
+            if (!response.isSuccessful()) {
+                return HttpClientResponse.from(response, response.body().string());
             }
-        } catch (IOException e) {
+
+            String body = response.body().string();
+
+            if (JsonArrayHolder.class.isAssignableFrom(clazz)) {
+                java.lang.reflect.Type elemType = findGenericArgument(clazz, JsonArrayHolder.class);
+
+                java.lang.reflect.Type listType =
+                        com.google.gson.reflect.TypeToken
+                                .getParameterized(java.util.List.class, elemType)
+                                .getType();
+
+                java.util.List<?> list = gson.fromJson(body, listType);
+
+                @SuppressWarnings("unchecked")
+                T container = clazz.getDeclaredConstructor().newInstance();
+
+                ((JsonArrayHolder) container).setItems(list);
+
+                return HttpClientResponse.from(response, container);
+            }
+
+            if (JsonValueHolder.class.isAssignableFrom(clazz)) {
+                java.lang.reflect.Type valType = findGenericArgument(clazz, JsonValueHolder.class);
+
+                Object value = gson.fromJson(body, valType);
+
+                @SuppressWarnings("unchecked")
+                T container = clazz.getDeclaredConstructor().newInstance();
+
+                ((JsonValueHolder) container).setValue(value);
+
+                return HttpClientResponse.from(response, container);
+            }
+
+            if (clazz == NoneResponse.class) {
+                @SuppressWarnings("unchecked")
+                T none = (T) NoneResponse.create();
+                return HttpClientResponse.from(response, none);
+            }
+            if (clazz == RawResponse.class) {
+                @SuppressWarnings("unchecked")
+                T raw = (T) new RawResponse(body);
+                return HttpClientResponse.from(response, raw);
+            }
+
+            return HttpClientResponse.from(response, gson.fromJson(body, clazz));
+
+        } catch (IOException | ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static java.lang.reflect.Type findGenericArgument(Class<?> target,
+                                                              Class<?> expectedRaw) {
+        for (java.lang.reflect.Type t : target.getGenericInterfaces()) {
+            if (t instanceof java.lang.reflect.ParameterizedType pt &&
+                    pt.getRawType() == expectedRaw) {
+                return pt.getActualTypeArguments()[0];
+            }
+        }
+
+        Class<?> superCls = target.getSuperclass();
+        if (superCls != null) {
+            return findGenericArgument(superCls, expectedRaw);
+        }
+        throw new IllegalStateException("Generic argument not found for " + target);
     }
 
     private String createUrl(RequestOptions requestOptions, String... pathSegments) {

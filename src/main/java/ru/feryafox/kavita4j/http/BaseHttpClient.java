@@ -13,6 +13,8 @@ public interface BaseHttpClient {
      HttpClientResponse<RawResponse> getRaw(RequestOptions options, String... pathSegments);
      <T extends BaseKavitaResponseModel> HttpClientResponse<T> post(Class<T> clazz, BaseKavitaRequestModel requestModel, RequestOptions options, String... pathSegments);
      HttpClientResponse<RawResponse> postRaw(BaseKavitaRequestModel requestModel, RequestOptions options, String... pathSegments);
+     <T extends BaseKavitaResponseModel> HttpClientResponse<T> delete(Class<T> clazz, RequestOptions options, String... pathSegments);
+     HttpClientResponse<RawResponse> deleteRaw(RequestOptions options, String... pathSegments);
 
      BinaryResponse getBinary(RequestOptions options, String... pathSegments);
 
@@ -30,6 +32,14 @@ public interface BaseHttpClient {
 
      default HttpClientResponse<RawResponse> postRaw(BaseKavitaRequestModel requestModel, String... pathSegments) {
           return postRaw(requestModel, new RequestOptions(), pathSegments);
+     }
+
+     default <T extends BaseKavitaResponseModel> HttpClientResponse<T> delete(Class<T> clazz, String... pathSegments) {
+          return delete(clazz, new RequestOptions(), pathSegments);
+     }
+
+     default HttpClientResponse<RawResponse> deleteRaw(String... pathSegments) {
+          return deleteRaw(new RequestOptions(), pathSegments);
      }
 
      default BinaryResponse getBinary(String... pathSegments) {

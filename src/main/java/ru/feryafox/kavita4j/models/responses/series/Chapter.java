@@ -1,4 +1,4 @@
-package ru.feryafox.kavita4j.models.responses.search;
+package ru.feryafox.kavita4j.models.responses.series;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 @AllArgsConstructor
 @NoArgsConstructor
 public
-class ChaptersItem extends BaseKavitaResponseModel {
+class Chapter extends BaseKavitaResponseModel {
 
 	@SerializedName("genresLocked")
 	private boolean genresLocked;
@@ -137,7 +137,7 @@ class ChaptersItem extends BaseKavitaResponseModel {
 	private String range;
 
 	@SerializedName("avgHoursToRead")
-	private double avgHoursToRead;
+	private int avgHoursToRead;
 
 	@SerializedName("title")
 	private String title;

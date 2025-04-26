@@ -1,4 +1,4 @@
-package ru.feryafox.kavita4j.models.responses.search;
+package ru.feryafox.kavita4j.models.responses.series;
 
 import java.util.List;
 
