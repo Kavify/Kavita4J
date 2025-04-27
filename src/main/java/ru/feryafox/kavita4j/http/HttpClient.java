@@ -133,11 +133,31 @@ public class HttpClient implements BaseHttpClient {
                 throw new IOException("Failed to download binary: " + response);
             }
 
+            String contentDisposition = response.header("Content-Disposition");
+            String filename = null;
+
+            if (contentDisposition != null) {
+                if (contentDisposition.contains("filename*=")) {
+                    int startIndex = contentDisposition.indexOf("filename*=") + 10;
+                    String encodedFilename = contentDisposition.substring(startIndex).split(";")[0].trim();
+                    if (encodedFilename.startsWith("UTF-8''")) {
+                        encodedFilename = encodedFilename.substring(7);
+                    }
+                    filename = java.net.URLDecoder.decode(encodedFilename, java.nio.charset.StandardCharsets.UTF_8);
+                } else if (contentDisposition.contains("filename=")) {
+                    int startIndex = contentDisposition.indexOf("filename=") + 9;
+                    filename = contentDisposition.substring(startIndex).split(";")[0].trim();
+                    filename = filename.replace("\"", "");
+                }
+            }
+
             ResponseBody body = response.body();
             byte[] bytes = body != null ? body.bytes() : null;
 
             return BinaryResponse.builder()
-                            .data(bytes).build();
+                    .filename(filename)
+                    .data(bytes)
+                    .build();
         } catch (IOException e) {
             throw new RuntimeException("Download error", e);
         }

@@ -5,7 +5,7 @@
 
     <groupId>ru.feryafox</groupId>
     <artifactId>Kavita4J</artifactId>
-    <version>0.0.19</version>
+    <version>0.1.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

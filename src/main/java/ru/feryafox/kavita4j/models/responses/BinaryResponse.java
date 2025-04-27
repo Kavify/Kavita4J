@@ -7,4 +7,5 @@ import lombok.*;
 @Builder
 public class BinaryResponse extends BaseKavitaResponseModel{
     private byte[] data;
+    private String filename;
 }
