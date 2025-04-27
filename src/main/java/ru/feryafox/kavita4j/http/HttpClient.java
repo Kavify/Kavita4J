@@ -134,6 +134,7 @@ public class HttpClient implements BaseHttpClient {
             }
 
             String contentDisposition = response.header("Content-Disposition");
+            System.out.println("Content-Disposition: " + contentDisposition);
             String filename = null;
 
             if (contentDisposition != null) {
@@ -143,11 +144,13 @@ public class HttpClient implements BaseHttpClient {
                     if (encodedFilename.startsWith("UTF-8''")) {
                         encodedFilename = encodedFilename.substring(7);
                     }
+                    encodedFilename = java.net.URLDecoder.decode(encodedFilename, java.nio.charset.StandardCharsets.UTF_8);
                     filename = java.net.URLDecoder.decode(encodedFilename, java.nio.charset.StandardCharsets.UTF_8);
                 } else if (contentDisposition.contains("filename=")) {
                     int startIndex = contentDisposition.indexOf("filename=") + 9;
                     filename = contentDisposition.substring(startIndex).split(";")[0].trim();
                     filename = filename.replace("\"", "");
+                    filename = java.net.URLDecoder.decode(filename, java.nio.charset.StandardCharsets.UTF_8);
                 }
             }
 
