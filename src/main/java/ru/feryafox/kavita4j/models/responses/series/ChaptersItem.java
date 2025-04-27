@@ -137,7 +137,7 @@ class ChaptersItem extends BaseKavitaResponseModel {
 	private String range;
 
 	@SerializedName("avgHoursToRead")
-	private int avgHoursToRead;
+	private double avgHoursToRead;
 
 	@SerializedName("title")
 	private String title;

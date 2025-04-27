@@ -19,7 +19,7 @@ public class Series extends BaseKavitaRequestModel {
 	private int libraryId;
 	private String primaryColor;
 	private int maxHoursToRead;
-	private int avgHoursToRead;
+	private double avgHoursToRead;
 	private String originalName;
 	private String folderPath;
 	private int minHoursToRead;

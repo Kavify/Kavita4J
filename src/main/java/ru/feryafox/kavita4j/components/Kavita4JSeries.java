@@ -372,7 +372,7 @@ public class Kavita4JSeries {
                         .build(),
                 "api",
                 "Series",
-                "detail"
+                "series-detail"
         );
     }
 

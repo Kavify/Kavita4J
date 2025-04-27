@@ -152,6 +152,7 @@ public class HttpClient implements BaseHttpClient {
             }
 
             String body = response.body().string();
+            System.out.println(body);
 
             if (JsonArrayHolder.class.isAssignableFrom(clazz)) {
                 java.lang.reflect.Type elemType = findGenericArgument(clazz, JsonArrayHolder.class);

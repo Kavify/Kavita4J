@@ -35,7 +35,7 @@ class VolumesItem extends BaseKavitaResponseModel {
 	private int maxHoursToRead;
 
 	@SerializedName("avgHoursToRead")
-	private int avgHoursToRead;
+	private double avgHoursToRead;
 
 	@SerializedName("seriesId")
 	private int seriesId;
