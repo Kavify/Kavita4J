@@ -12,6 +12,7 @@ public class Kavita4J {
     private final Kavita4JImage image;
     private final Kavita4JAccount account;
     private final Kavita4JSeries series;
+    private final Kavita4JDownload download;
 
     public Kavita4J(String baseUrl) {
         this(new HttpClient(baseUrl));
@@ -24,6 +25,7 @@ public class Kavita4J {
         this.image = new Kavita4JImage(auth);
         this.account = new Kavita4JAccount(auth);
         this.series = new Kavita4JSeries(auth);
+        this.download = new Kavita4JDownload(auth);
     }
 
     public Kavita4JAuth auth() {
@@ -44,6 +46,10 @@ public class Kavita4J {
 
     public Kavita4JSeries series() {
         return series;
+    }
+
+    public Kavita4JDownload download() {
+        return download;
     }
 
     public void setBaseUrl(String baseUrl) {

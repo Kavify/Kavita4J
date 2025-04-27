@@ -1,9 +1,8 @@
 package ru.feryafox.kavita4j.components;
 
 import okhttp3.HttpUrl;
-import ru.feryafox.kavita4j.http.BaseAuthHttpClient;
-import ru.feryafox.kavita4j.http.BaseHttpClient;
 import ru.feryafox.kavita4j.http.RequestOptions;
+import ru.feryafox.kavita4j.http.utils.UrlBuilderUtils;
 import ru.feryafox.kavita4j.models.responses.BinaryResponse;
 import ru.feryafox.kavita4j.models.responses.UrlResponse;
 
@@ -257,9 +256,10 @@ public class Kavita4JImage {
     }
 
     private HttpUrl.Builder baseUrlBuilder() {
-        return HttpUrl.parse(client.getBaseUrl()).newBuilder()
-                .addPathSegment("api")
-                .addPathSegment("Image")
-                .addQueryParameter("apiKey", client.getApiKey());
+        return UrlBuilderUtils.baseUrlBuilder(
+                client.getBaseUrl(),
+                "Image",
+                client.getApiKey()
+        );
     }
 }
