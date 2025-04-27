@@ -3,14 +3,14 @@ package ru.feryafox.kavita4j.components;
 import ru.feryafox.kavita4j.http.BaseAuthHttpClient;
 import ru.feryafox.kavita4j.http.HttpClientResponse;
 import ru.feryafox.kavita4j.http.RequestOptions;
-import ru.feryafox.kavita4j.models.requests.series.DeleteMultiple;
-import ru.feryafox.kavita4j.models.requests.series.FilterV2;
-import ru.feryafox.kavita4j.models.requests.series.UpdateRating;
-import ru.feryafox.kavita4j.models.requests.series.UpdateSeries;
+import ru.feryafox.kavita4j.models.requests.NoneRequest;
+import ru.feryafox.kavita4j.models.requests.series.*;
 import ru.feryafox.kavita4j.models.responses.NoneResponse;
 import ru.feryafox.kavita4j.models.responses.series.*;
+import ru.feryafox.kavita4j.models.responses.series.SeriesMetadata;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Kavita4JSeries {
@@ -192,7 +192,311 @@ public class Kavita4JSeries {
                         .build(),
                 "api",
                 "Series",
-                "v2"
+                "all-v2"
+        );
+    }
+
+    public HttpClientResponse<SeriesList> onDeck(
+            int pageNumber,
+            int pageSize,
+            int libraryId
+    ) {
+        return client.postAuth(
+                SeriesList.class,
+                NoneRequest.create(),
+                RequestOptions.builder()
+                        .addQueryParam("PageNumber", String.valueOf(pageNumber))
+                        .addQueryParam("PageSize", String.valueOf(pageSize))
+                        .addQueryParam("libraryId", String.valueOf(libraryId))
+                        .build(),
+                "api",
+                "Series",
+                "on-deck"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> removeFromOnDeck(
+            int seriesId
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                NoneRequest.create(),
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .build(),
+                "api",
+                "Series",
+                "remove-from-on-deck"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> refreshMetadata(
+            int libraryId,
+            int seriesId,
+            boolean forceUpdate,
+            boolean forceColorscape
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                RefreshSeries.builder()
+                        .libraryId(libraryId)
+                        .seriesId(seriesId)
+                        .forceUpdate(forceUpdate)
+                        .forceColorscape(forceColorscape)
+                        .build(),
+                "api",
+                "Series",
+                "refresh-metadata"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> scan(
+            int libraryId,
+            int seriesId,
+            boolean forceUpdate,
+            boolean forceColorscape
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                RefreshSeries.builder()
+                        .libraryId(libraryId)
+                        .seriesId(seriesId)
+                        .forceUpdate(forceUpdate)
+                        .forceColorscape(forceColorscape)
+                        .build(),
+                "api",
+                "Series",
+                "scan"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> analyze(
+            int libraryId,
+            int seriesId,
+            boolean forceUpdate,
+            boolean forceColorscape
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                RefreshSeries.builder()
+                        .libraryId(libraryId)
+                        .seriesId(seriesId)
+                        .forceUpdate(forceUpdate)
+                        .forceColorscape(forceColorscape)
+                        .build(),
+                "api",
+                "Series",
+                "analyze"
+        );
+    }
+
+    public HttpClientResponse<SeriesMetadata> getMetadata(
+            int seriesId
+    ) {
+        return client.getAuth(
+                SeriesMetadata.class,
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .build(),
+                "api",
+                "Series",
+                "metadata"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> updateMetadata(
+            UpdateSeriesMetadata updateSeriesMetadata
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                updateSeriesMetadata,
+                "api",
+                "Series",
+                "metadata"
+        );
+    }
+
+    public HttpClientResponse<SeriesList> getSeriesByCollection(
+            int collectionId,
+            int pageNumber,
+            int pageSize
+    ) {
+        return client.getAuth(
+                SeriesList.class,
+                RequestOptions.builder()
+                        .addQueryParam("PageNumber", String.valueOf(pageNumber))
+                        .addQueryParam("PageSize", String.valueOf(pageSize))
+                        .addQueryParam("collectionId", String.valueOf(collectionId))
+                        .build(),
+                "api",
+                "Series",
+                "by-collection"
+        );
+    }
+
+    public HttpClientResponse<SeriesList> getSeriesByIds(
+            List<Integer> seriesIds
+    ) {
+        return client.postAuth(
+                SeriesList.class,
+                SeriesByIds.builder()
+                        .seriesIds(seriesIds)
+                        .build(),
+                "api",
+                "Series",
+                "series-by-ids"
+        );
+    }
+
+    public HttpClientResponse<AgeRating> getAgeRating(
+            int ageRating
+    ) {
+        return client.getAuth(
+                AgeRating.class,
+                RequestOptions.builder()
+                        .addQueryParam("ageRating", String.valueOf(ageRating))
+                        .build(),
+                "api",
+                "Series",
+                "age-rating"
+        );
+    }
+
+    public HttpClientResponse<SeriesDetail> getSeriesDetail(
+            int seriesId
+    ) {
+        return client.getAuth(
+                SeriesDetail.class,
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .build(),
+                "api",
+                "Series",
+                "detail"
+        );
+    }
+
+    public HttpClientResponse<SeriesList> getRelated(
+            int seriesId,
+            int relation
+    ) {
+        return client.getAuth(
+                SeriesList.class,
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .addQueryParam("relation", String.valueOf(relation))
+                        .build(),
+                "api",
+                "Series",
+                "related"
+        );
+    }
+
+    public HttpClientResponse<SeriesList> getAllRelated(
+            int seriesId
+    ) {
+        return client.getAuth(
+                SeriesList.class,
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .build(),
+                "api",
+                "Series",
+                "all-related"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> updateSeriesRelated(
+            UpdateRelatedSeries updateSeriesRelation
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                updateSeriesRelation,
+                "api",
+                "Series",
+                "update-related"
+        );
+    }
+
+    public HttpClientResponse<ExternalSeries> getExternalSeriesDetail(
+            int aniListId,
+            int malId,
+            int seriesId
+    ) {
+        return client.getAuth(
+                ExternalSeries.class,
+                RequestOptions.builder()
+                        .addQueryParam("aniListId", String.valueOf(aniListId))
+                        .addQueryParam("malId", String.valueOf(malId))
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .build(),
+                "api",
+                "Series",
+                "external-series-detail"
+        );
+    }
+
+    public HttpClientResponse<NextExpectedChapter> getNextExpected(
+            int seriesId
+    ) {
+        return client.getAuth(
+                NextExpectedChapter.class,
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .build(),
+                "api",
+                "Series",
+                "next-expected"
+        );
+    }
+
+    public HttpClientResponse<ExternalSeriesMatch> match(
+            MatchSeries matchSeries
+    ) {
+        return client.postAuth(
+                ExternalSeriesMatch.class,
+                matchSeries,
+                "api",
+                "Series",
+                "match"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> updateMatch(
+            int seriesId,
+            int aniListId,
+            int malId,
+            int cbrId
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                NoneRequest.create(),
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .addQueryParam("aniListId", String.valueOf(aniListId))
+                        .addQueryParam("malId", String.valueOf(malId))
+                        .addQueryParam("cbrId", String.valueOf(cbrId))
+                        .build(),
+                "api",
+                "Series",
+                "update-match"
+        );
+    }
+
+    public HttpClientResponse<NoneResponse> dontMatch(
+            int seriesId,
+            boolean dontMatch
+    ) {
+        return client.postAuth(
+                NoneResponse.class,
+                NoneRequest.create(),
+                RequestOptions.builder()
+                        .addQueryParam("seriesId", String.valueOf(seriesId))
+                        .addQueryParam("dontMatch", String.valueOf(dontMatch))
+                        .build(),
+                "api",
+                "Series",
+                "dont-match"
         );
     }
 }

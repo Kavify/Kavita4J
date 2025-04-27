@@ -6,10 +6,19 @@ import com.google.gson.annotations.SerializedName;
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor public
-class CharactersItem extends ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel {
+class StaffItem extends ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel {
+
+	@SerializedName("firstName")
+	private String firstName;
+
+	@SerializedName("lastName")
+	private String lastName;
 
 	@SerializedName("role")
-	private int role;
+	private String role;
+
+	@SerializedName("gender")
+	private String gender;
 
 	@SerializedName("imageUrl")
 	private String imageUrl;

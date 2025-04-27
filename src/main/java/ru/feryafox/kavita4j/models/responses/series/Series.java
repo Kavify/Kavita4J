@@ -1,108 +1,77 @@
 package ru.feryafox.kavita4j.models.responses.series;
 
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Series extends BaseKavitaResponseModel {
+@lombok.EqualsAndHashCode(callSuper = true)
+@lombok.Data
+@lombok.AllArgsConstructor
+@lombok.NoArgsConstructor public
+class Series extends ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel {
 
-	@SerializedName("hasUserRated")
-	private boolean hasUserRated;
+	@SerializedName("summary")
+	private String summary;
 
-	@SerializedName("libraryName")
-	private String libraryName;
+	@SerializedName("siteUrl")
+	private String siteUrl;
 
-	@SerializedName("sortName")
-	private String sortName;
+	@SerializedName("endDate")
+	private String endDate;
 
-	@SerializedName("pagesRead")
-	private int pagesRead;
+	@SerializedName("chapters")
+	private int chapters;
 
-	@SerializedName("latestReadDate")
-	private String latestReadDate;
+	@SerializedName("synonyms")
+	private List<String> synonyms;
 
-	@SerializedName("lastFolderScanned")
-	private String lastFolderScanned;
+	@SerializedName("volumes")
+	private int volumes;
 
-	@SerializedName("libraryId")
-	private int libraryId;
+	@SerializedName("staff")
+	private List<StaffItem> staff;
 
-	@SerializedName("primaryColor")
-	private String primaryColor;
+	@SerializedName("chapterDtos")
+	private List<ChapterDtosItem> chapterDtos;
 
-	@SerializedName("maxHoursToRead")
-	private int maxHoursToRead;
+	@SerializedName("cbrId")
+	private int cbrId;
 
-	@SerializedName("avgHoursToRead")
-	private double avgHoursToRead;
+	@SerializedName("tags")
+	private List<TagsItem> tags;
 
-	@SerializedName("originalName")
-	private String originalName;
+	@SerializedName("averageScore")
+	private int averageScore;
 
-	@SerializedName("folderPath")
-	private String folderPath;
+	@SerializedName("coverUrl")
+	private String coverUrl;
 
-	@SerializedName("minHoursToRead")
-	private int minHoursToRead;
+	@SerializedName("characters")
+	private List<CharactersItem> characters;
 
-	@SerializedName("pages")
-	private int pages;
+	@SerializedName("provider")
+	private int provider;
 
-	@SerializedName("coverImage")
-	private String coverImage;
-
-	@SerializedName("nameLocked")
-	private boolean nameLocked;
-
-	@SerializedName("id")
-	private int id;
-
-	@SerializedName("dontMatch")
-	private boolean dontMatch;
-
-	@SerializedName("sortNameLocked")
-	private boolean sortNameLocked;
-
-	@SerializedName("lowestFolderPath")
-	private String lowestFolderPath;
-
-	@SerializedName("localizedName")
-	private String localizedName;
-
-	@SerializedName("wordCount")
-	private int wordCount;
-
-	@SerializedName("created")
-	private String created;
-
-	@SerializedName("lastChapterAdded")
-	private String lastChapterAdded;
-
-	@SerializedName("format")
-	private int format;
-
-	@SerializedName("coverImageLocked")
-	private boolean coverImageLocked;
-
-	@SerializedName("localizedNameLocked")
-	private boolean localizedNameLocked;
-
-	@SerializedName("userRating")
-	private int userRating;
-
-	@SerializedName("isBlacklisted")
-	private boolean isBlacklisted;
+	@SerializedName("genres")
+	private List<String> genres;
 
 	@SerializedName("name")
 	private String name;
 
-	@SerializedName("secondaryColor")
-	private String secondaryColor;
+	@SerializedName("publisher")
+	private String publisher;
+
+	@SerializedName("plusMediaFormat")
+	private int plusMediaFormat;
+
+	@SerializedName("relations")
+	private List<RelationsItem> relations;
+
+	@SerializedName("aniListId")
+	private int aniListId;
+
+	@SerializedName("malId")
+	private int malId;
+
+	@SerializedName("startDate")
+	private String startDate;
 }

@@ -14,36 +14,36 @@ import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 public
 class InkersItem extends BaseKavitaResponseModel {
 
-    @SerializedName("coverImage")
-    private String coverImage;
+	@SerializedName("coverImage")
+	private String coverImage;
 
-    @SerializedName("name")
-    private String name;
+	@SerializedName("name")
+	private String name;
 
-    @SerializedName("primaryColor")
-    private String primaryColor;
+	@SerializedName("primaryColor")
+	private String primaryColor;
 
-    @SerializedName("coverImageLocked")
-    private boolean coverImageLocked;
+	@SerializedName("coverImageLocked")
+	private boolean coverImageLocked;
 
-    @SerializedName("description")
-    private String description;
+	@SerializedName("description")
+	private String description;
 
-    @SerializedName("asin")
-    private String asin;
+	@SerializedName("asin")
+	private String asin;
 
-    @SerializedName("id")
-    private int id;
+	@SerializedName("id")
+	private int id;
 
-    @SerializedName("hardcoverId")
-    private String hardcoverId;
+	@SerializedName("hardcoverId")
+	private String hardcoverId;
 
-    @SerializedName("aniListId")
-    private int aniListId;
+	@SerializedName("aniListId")
+	private int aniListId;
 
-    @SerializedName("malId")
-    private int malId;
+	@SerializedName("malId")
+	private int malId;
 
-    @SerializedName("secondaryColor")
-    private String secondaryColor;
+	@SerializedName("secondaryColor")
+	private String secondaryColor;
 }

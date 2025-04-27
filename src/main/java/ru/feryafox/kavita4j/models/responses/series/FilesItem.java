@@ -14,24 +14,24 @@ import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 public
 class FilesItem extends BaseKavitaResponseModel {
 
-    @SerializedName("extension")
-    private String extension;
+	@SerializedName("extension")
+	private String extension;
 
-    @SerializedName("pages")
-    private int pages;
+	@SerializedName("pages")
+	private int pages;
 
-    @SerializedName("bytes")
-    private int bytes;
+	@SerializedName("bytes")
+	private int bytes;
 
-    @SerializedName("created")
-    private String created;
+	@SerializedName("created")
+	private String created;
 
-    @SerializedName("filePath")
-    private String filePath;
+	@SerializedName("filePath")
+	private String filePath;
 
-    @SerializedName("format")
-    private int format;
+	@SerializedName("format")
+	private int format;
 
-    @SerializedName("id")
-    private int id;
+	@SerializedName("id")
+	private int id;
 }

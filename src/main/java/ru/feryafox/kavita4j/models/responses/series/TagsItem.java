@@ -1,22 +1,28 @@
 package ru.feryafox.kavita4j.models.responses.series;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public
-class TagsItem extends BaseKavitaResponseModel {
+@lombok.EqualsAndHashCode(callSuper = true)
+@lombok.Data
+@lombok.AllArgsConstructor
+@lombok.NoArgsConstructor public
+class TagsItem extends ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel {
 
-    @SerializedName("id")
-    private int id;
+	@SerializedName("name")
+	private String name;
 
-    @SerializedName("title")
-    private String title;
+	@SerializedName("description")
+	private String description;
+
+	@SerializedName("rank")
+	private int rank;
+
+	@SerializedName("isMediaSpoiler")
+	private boolean isMediaSpoiler;
+
+	@SerializedName("isAdult")
+	private boolean isAdult;
+
+	@SerializedName("isGeneralSpoiler")
+	private boolean isGeneralSpoiler;
 }

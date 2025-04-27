@@ -14,7 +14,7 @@ import ru.feryafox.kavita4j.models.responses.BaseKavitaResponseModel;
 @AllArgsConstructor
 @NoArgsConstructor
 public
-class ChaptersItem extends BaseKavitaResponseModel {
+class StorylineChaptersItem extends BaseKavitaResponseModel {
 
 	@SerializedName("genresLocked")
 	private boolean genresLocked;
